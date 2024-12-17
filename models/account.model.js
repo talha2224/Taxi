@@ -12,7 +12,7 @@ const AccountSchema = mongoose.Schema({
     dob:{type:String,required:true},
     licenseImage: { type: String, default: null },
     insuranceImage: { type: String, default: null },
-    carPhoto:{ type: String, required: true },
+    carPhoto:{ type: Array, required: true },
 })
 
 
