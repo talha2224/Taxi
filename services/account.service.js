@@ -39,7 +39,7 @@ const createAccount = async (req, res) => {
                 let output;
                 let output2;
                 let output3;
-                let output4;
+                let output4 = [];
 
                 if (profilePhoto && profilePhoto.length > 0) {
                     const uploadPromises = profilePhoto.map(async (i) => {
@@ -69,6 +69,8 @@ const createAccount = async (req, res) => {
                     });
                     output4 = await Promise.all(uploadPromises);
                 }
+
+                
 
                 let hash = await bcrypt.hash(password,10)
                 let result = await Account.create({role,username,email,password:hash,dob,profilePhoto:output,carPhotos:output4,insuranceImage:output3,licenseImage:output2})
