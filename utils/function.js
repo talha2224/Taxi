@@ -4,6 +4,7 @@ const { getDownloadURL, ref, uploadBytes } = require("@firebase/storage");
 
 module.exports = { 
     uploadFile: (async (file) => {
+        console.log(file,'file')
         const uniqueFilename = `${file.originalname}-${Date.now()}`;
         const storageRef = ref(storage, `${uniqueFilename}`);
         await uploadBytes(storageRef, file.buffer);

@@ -10,8 +10,8 @@ const AccountSchema = mongoose.Schema({
     password:{type:String,required:true},
     profilePhoto:{type:String,required:true},
     dob:{type:String,required:true},
-    licenseImage: { type: String, default: null },
-    insuranceImage: { type: String, default: null },
+    licenseImage: { type: Array, default: null },
+    insuranceImage: { type: Array, default: null },
     carPhoto:{ type: Array, required: true },
 })
 

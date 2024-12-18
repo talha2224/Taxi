@@ -10,7 +10,8 @@ const { uploadFile } = require("../utils/function")
 
 const createAccount = async (req, res) => {
     try {
-        let { role, username, email, password, dob } = req.body
+        let { role, username, email, password, dob,phone} = req.body
+        console.log(phone,'phone')
         let findUser = await Account.findOne({ email })
         if (findUser) {
             return res.status(400).json({ data: null, msg: "Account already exits", code: 400 })
@@ -18,16 +19,9 @@ const createAccount = async (req, res) => {
         else {
             if (role == "rider") {
                 let profilePhoto = req.files.profilePhoto && req.files.profilePhoto;
-                let output;
-                if (profilePhoto && profilePhoto.length > 0) {
-                    const uploadPromises = profilePhoto.map(async (i) => {
-                        let result = await uploadFile(i)
-                        return result;
-                    });
-                    output = await Promise.all(uploadPromises);
-                }
+                let output =  await uploadFile(profilePhoto?.length>0?profilePhoto[0]:profilePhoto);
                 let hash = await bcrypt.hash(password,10)
-                let result = await Account.create({role,username,email,password:hash,dob,profilePhoto:output})
+                let result = await Account.create({phone,role,username,email,password:hash,dob,profilePhoto:output})
                 return res.status(200).json({data:result,msg:null,status:200})
             }
             else{
@@ -36,18 +30,10 @@ const createAccount = async (req, res) => {
                 let insuranceImage = req.files.insuranceImage && req.files.insuranceImage;
                 let carPhotos = req.files.carPhotos && req.files.carPhotos;
 
-                let output;
+                let output =  await uploadFile(profilePhoto);
                 let output2;
                 let output3;
                 let output4 = [];
-
-                if (profilePhoto && profilePhoto.length > 0) {
-                    const uploadPromises = profilePhoto.map(async (i) => {
-                        let result = await uploadFile(i)
-                        return result;
-                    });
-                    output = await Promise.all(uploadPromises);
-                }
                 if (licenseImage && licenseImage.length > 0) {
                     const uploadPromises = licenseImage.map(async (i) => {
                         let result = await uploadFile(i)
@@ -69,11 +55,8 @@ const createAccount = async (req, res) => {
                     });
                     output4 = await Promise.all(uploadPromises);
                 }
-
-                
-
                 let hash = await bcrypt.hash(password,10)
-                let result = await Account.create({role,username,email,password:hash,dob,profilePhoto:output,carPhotos:output4,insuranceImage:output3,licenseImage:output2})
+                let result = await Account.create({phone,role,username,email,password:hash,dob,profilePhoto:output,carPhotos:output4,insuranceImage:output3,licenseImage:output2})
                 return res.status(200).json({data:result,msg:null,status:200})
             }
         }
